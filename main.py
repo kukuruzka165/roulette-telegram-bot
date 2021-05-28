@@ -255,7 +255,7 @@ async def mess(message):
                 print(time.ctime())
                 print(message.from_user.first_name, message.from_user.last_name,
                       "@", message.from_user.username, "id =", message.from_user.id)
-                print(message.chat_title)
+                print(message.chat.title)
                 print("-")
                 print("Прислал(а):", message.text)
 
