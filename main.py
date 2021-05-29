@@ -9,14 +9,21 @@ print("Я жив!")
 print("Спасибо, что запустил(а) меня!")
 
 
+async def log(text):
+    await bot.send_message(chat_id='GROUP_ID', text=text)
+
+
 @dp.message_handler(commands=["start"])
 async def start(message):
-    print("")
     print("--------------------")
     print(time.ctime())
-    print(message.from_user.first_name, message.from_user.last_name, message.from_user.username, message.from_user.id)
+    print(message.from_user.first_name, message.from_user.last_name,
+          "@", message.from_user.username, "id =", message.from_user.id)
+    print(message.chat.title, message.chat.invite_link, "id =", message.chat.id)
     print("-")
+    await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title}, {message.chat.invite_link}, id =, {message.chat.id}\n-")
     print("Запрошен старт")
+    await log("Запрошен старт")
 
     markup1 = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
     btnr = types.KeyboardButton("Играть")
@@ -33,26 +40,30 @@ async def start(message):
 
     send_mess = f"<b>Вот список доступных " \
                 f"команд:</b>\n\n<b>/roll</b> - Сыграть в рулетку (Имеет аналог на клавиатуре)\n<b>/disclaimer</b> - " \
-                f"Отказ от ответственности (Имеет аналог на клавиатуре)\n<b>/ping</b> - Понг!\n<b>/author</b> - Автор " \
-                f"бота (Имеет аналог на клавиатуре)\n\n<b>Или пользуйся клавиатурой с кнопками:</b> "
+                f"Отказ от ответственности (Имеет аналог на клавиатуре)\n<b>/ping</b> - Понг!\n<b>/author</b> - " \
+                f"Автор бота (Имеет аналог на клавиатуре)\n\n<b>Или пользуйся клавиатурой с кнопками:</b> "
     await bot.send_message(message.chat.id, send_mess, parse_mode="html")
 
     send_mess = "<b>Удачи!</b>"
-    await bot.send_message(message.chat.id, send_mess, parse_mode="html")
+    await bot.send_message(message.chat.id, send_mess, parse_mode="html", reply_markup=markup1)
 
     print("Старт успешно отправлен!")
+    await log("Старт успешно отправлен!")
 
 
 @dp.message_handler(commands=["roll"])
 async def roll(message):
-    print("")
     print("--------------------")
     print(time.ctime())
-    print(message.from_user.first_name, message.from_user.last_name, message.from_user.username, message.from_user.id)
+    print(message.from_user.first_name, message.from_user.last_name,
+          "@", message.from_user.username, "id =", message.from_user.id)
+    print(message.chat.title, message.chat.invite_link)
     print("-")
+    await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n-")
     print("Крутим!")
     rnd = randint(1, 37)
     print("Выпал из 37 вариант", rnd)
+    await log(f"Крутим!\nВыпал из 37 вариант {rnd}")
 
     # Старый, нерабочий и тупой говнокод, который я из вредности не выразаю :-) :
     # if rnd == 0:
@@ -175,57 +186,73 @@ async def roll(message):
     send_mess = f"<b>{message.from_user.first_name}, ваш результат:\n{result}</b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html")
     print("Прокрутили! Результат -", result)
+    await log(f"Прокрутили! Результат - {result}")
 
 
 @dp.message_handler(commands=["ping"])
 async def ping(message):
-    print("")
     print("--------------------")
     print(time.ctime())
-    print(message.from_user.first_name, message.from_user.last_name, message.from_user.username, message.from_user.id)
+    print(message.from_user.first_name, message.from_user.last_name,
+          "@", message.from_user.username, "id =", message.from_user.id)
+    print(message.chat.title, message.chat.invite_link)
     print("-")
+    await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title}, {message.chat.invite_link}, id =, {message.chat.id}\n-")
     print("Пинг?")
+    await log("Пинг?")
     send_mess = f"<b>Понг! Я жив!</b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html")
     print("Понг!")
+    await log("Понг!")
 
 
 @dp.message_handler(commands=["disclaimer"])
 async def disclaimer(message):
-    print("")
     print("--------------------")
     print(time.ctime())
-    print(message.from_user.first_name, message.from_user.last_name, message.from_user.username, message.from_user.id)
+    print(message.from_user.first_name, message.from_user.last_name,
+          "@", message.from_user.username, "id =", message.from_user.id)
+    print(message.chat.title, message.chat.invite_link)
     print("-")
+    await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title}, {message.chat.invite_link}, id =, {message.chat.id}\n-")
     print("Запрошен дисклеймер.")
+    await log("Запрошен дисклеймер.")
     send_mess = "<b>ДИСКЛЕЙМЕР (ОТКАЗ ОТ ОТВЕТСТВЕННОСТИ): </b>Я полностью отказываюсь от результатов использования " \
                 "данного бота не в целях развлечения. Бот создан не в коммерческих целях, и никогда таким не " \
                 "станет!\n\n<b>Коротко:</b> Ставок нет."
     await bot.send_message(message.chat.id, send_mess, parse_mode="html")
     print("Дисклеймер отправлен.")
+    await log("Дисклеймер отправлен.")
 
 
 @dp.message_handler(commands=["author"])
 async def author(message):
-    print("")
     print("--------------------")
     print(time.ctime())
-    print(message.from_user.first_name, message.from_user.last_name, message.from_user.username, message.from_user.id)
+    print(message.from_user.first_name, message.from_user.last_name,
+          "@", message.from_user.username, "id =", message.from_user.id)
+    print(message.chat.title, message.chat.invite_link)
     print("-")
+    await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title}, {message.chat.invite_link}, id =, {message.chat.id}\n-")
     print("Запрошен автор.")
+    await log("Запрошен автор.")
     send_mess = f"<b>Мой автор - @anton165</b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html")
     print("Автор заслан)")
+    await log("Автор заслан)")
 
 
 @dp.message_handler(commands=["keyboard"])
 async def keyboard(message):
-    print("")
     print("--------------------")
     print(time.ctime())
-    print(message.from_user.first_name, message.from_user.last_name, message.from_user.username, message.from_user.id)
+    print(message.from_user.first_name, message.from_user.last_name,
+          "@", message.from_user.username, "id =", message.from_user.id)
+    print(message.chat.title, message.chat.invite_link)
     print("-")
+    await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title}, {message.chat.invite_link}, id =, {message.chat.id}\n-")
     print("Запрошено открытие клавиатуры!")
+    await log("Запрошено открытие клавиатуры!")
     markup1 = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
     btnr = types.KeyboardButton("Играть")
     btna = types.KeyboardButton("Автор")
@@ -235,6 +262,7 @@ async def keyboard(message):
     send_mess = f"<b>Клавиатура открыта!</b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html", reply_markup=markup1)
     print("Клавиатура открыта)")
+    await log("Клавиатура открыта)")
 
 
 @dp.message_handler(content_types=["text"])
@@ -250,15 +278,18 @@ async def mess(message):
             if get_message_bot == "отказ от ответственности":
                 await disclaimer(message)
             else:
-                print("")
                 print("--------------------")
                 print(time.ctime())
                 print(message.from_user.first_name, message.from_user.last_name,
                       "@", message.from_user.username, "id =", message.from_user.id)
-                print(message.chat.title)
+                print(message.chat.title, message.chat.invite_link)
                 print("-")
+                await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title}, {message.chat.invite_link}, id =, {message.chat.id}\n-")
                 print("Прислал(а):", message.text)
+                await log(f"Прислал(а): {message.text}")
 
 
 if __name__ == '__main__':
     executor.start_polling(dp)
+
+wait = input("ЭРРОР!")
