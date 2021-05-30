@@ -1,7 +1,8 @@
-from config import TOKEN
+from config import TOKEN  # , gif_id
 import time
 from aiogram import Bot, Dispatcher, executor, types
 from random import randint
+import asyncio
 
 
 bot = Bot(token=TOKEN)
@@ -50,16 +51,21 @@ async def start(message):
 @dp.message_handler(commands=["roll"])
 async def roll(message):
     await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
-    rnd = randint(1, 37)
-    await log(f"Запрошено кручение!\nВыпал вариант {rnd} из 37")
 
-    # Старый, нерабочий и тупой говнокод, который я из вредности не выразаю :-) :
-    # if rnd == 0:
-    #    color = "🟢 Зелёный"
-    # else:
-    #    if rnd == 32 or 19 or 21 or 25 or 34 or 27 or 36 or 30 or 23 or 5 or 16 or 1 or 14 or 9 or 18 or 7 or 12 or 3:
-    #        color = "🔴 Красный"
-    # Не бейте за новый говнокод, мне так понятнее просто
+    #  gif_mess = await bot.send_animation(message.chat.id, gif_id)
+    #  gif_mess_id = gif_mess.message_id
+
+    send_mess = "<b>Крутим барабан... </b>"
+    roll_mess = await bot.send_message(message.chat.id, send_mess, parse_mode="html")
+    roll_mess_id = roll_mess.message_id
+
+    rnd_sleep = randint(1, 3)
+    rnd = randint(1, 37)
+    await log(f"Запрошено кручение!\nВыпал вариант {rnd} из 37. Ждём {rnd_sleep} сек...")
+    #  await log(f"Запрошено кручение!\nВыпал вариант {rnd} из 37")
+
+    await asyncio.sleep(rnd_sleep)
+
     result = "Ошибка!"
     if rnd == 1:
         result = "Зеро! 🟢 Зелёный"
@@ -171,8 +177,12 @@ async def roll(message):
                                                                                                                                                 else:
                                                                                                                                                     if rnd == 37:
                                                                                                                                                         result = "26, ⚫ Чёрный"
-    send_mess = f"<b>{message.from_user.first_name}, ваш результат:\n{result}</b>"
-    await bot.send_message(message.chat.id, send_mess, parse_mode="html")
+    #  await bot.delete_message(chat_id=message.chat.id, message_id=gif_mess_id)
+    #  await bot.delete_message(chat_id=message.chat.id, message_id=roll_mess_id)
+
+    await bot.edit_message_text(chat_id=message.chat.id, message_id=roll_mess_id, text=f"<b>{message.from_user.first_name}, ваш результат:\n{result}</b>", parse_mode="html")
+    #  send_mess = f"<b>{message.from_user.first_name}, ваш результат:\n{result}</b>"
+    #  await bot.send_message(message.chat.id, send_mess, parse_mode="html")
     await log(f"Прокрутили! Результат - {result}")
 
 
