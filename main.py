@@ -251,8 +251,7 @@ async def orlanka(message):
 
     send_mess = f"<b>{message.from_user.first_name}, ваш результат:\n{resultoreshka}</b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html")
-    await log("Заслал)")
-    await log(dice.dice.value)
+    await log("Отправлено.")
 
 
 @dp.message_handler(commands=["dice"])
