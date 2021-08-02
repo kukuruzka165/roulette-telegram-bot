@@ -51,20 +51,16 @@ async def start(message):
 @dp.message_handler(commands=["roll"])
 async def roll(message):
     await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
+    gamecode = randint(1000, 9999)
+    await log(f"{gamecode} - Запрошено кручение!")
 
     #  gif_mess = await bot.send_animation(message.chat.id, gif_id)
     #  gif_mess_id = gif_mess.message_id
 
-    send_mess = "<b>Крутим барабан... </b>"
-    roll_mess = await bot.send_message(message.chat.id, send_mess, parse_mode="html")
-    roll_mess_id = roll_mess.message_id
-
     rnd_sleep = randint(1, 3)
     rnd = randint(1, 37)
-    await log(f"Запрошено кручение!\nВыпал вариант {rnd} из 37. Ждём {rnd_sleep} сек...")
+    await log(f"{gamecode} - Выпал вариант {rnd} из 37.")
     #  await log(f"Запрошено кручение!\nВыпал вариант {rnd} из 37")
-
-    await asyncio.sleep(rnd_sleep)
 
     #  elif? Нет, не учили)
 
@@ -182,10 +178,17 @@ async def roll(message):
     #  await bot.delete_message(chat_id=message.chat.id, message_id=gif_mess_id)
     #  await bot.delete_message(chat_id=message.chat.id, message_id=roll_mess_id)
 
+    send_mess = "<b>Крутим барабан... </b>"
+    roll_mess = await bot.send_message(message.chat.id, send_mess, parse_mode="html")
+    roll_mess_id = roll_mess.message_id
+    await log(f"{gamecode} - Результат - {result}. Ждём {rnd_sleep} сек...")
+    await asyncio.sleep(rnd_sleep)
+
     await bot.edit_message_text(chat_id=message.chat.id, message_id=roll_mess_id, text=f"<b>{message.from_user.first_name}, ваш результат:\n{result}</b>", parse_mode="html")
+    await log(f"{gamecode} - Готово.")
     #  send_mess = f"<b>{message.from_user.first_name}, ваш результат:\n{result}</b>"
     #  await bot.send_message(message.chat.id, send_mess, parse_mode="html")
-    await log(f"Прокрутили! Результат - {result}")
+
 
 
 @dp.message_handler(commands=["ping"])
@@ -257,9 +260,11 @@ async def orlanka(message):
 @dp.message_handler(commands=["dice"])
 async def dice(message):
     await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
-    await log("Запрошен дайс.")
+    gamecode = randint(100, 999)
+    dice_sleep = 3
+    await log(f"{gamecode} - Запрошен дайс.")
     dice_message = await bot.send_dice(message.chat.id, emoji="🎲")
-    await log(f"Подкинул. Результат: {dice_message.dice.value}. Ждём 5 секунд..")
+    await log(f"{gamecode} - Подкинул. Результат: {dice_message.dice.value}. Ждём {dice_sleep} сек...")
     send_mess = f"<b>Пожалйста подождите..</b>"
     dice_comment_message = await bot.send_message(message.chat.id, send_mess, parse_mode="html")
 
@@ -284,9 +289,9 @@ async def dice(message):
                         if dice_message.dice.value == 6:
                             dice_emoji = "⚅"
 
-    await asyncio.sleep(3)
+    await asyncio.sleep(dice_sleep)
     await bot.edit_message_text(chat_id=message.chat.id, message_id=dice_comment_message.message_id, text=f"<b>{message.from_user.first_name}, ваш результат:\n{dice_emoji} {dice_message.dice.value}</b>", parse_mode="html")
-    await log("Дайс отправлен.")
+    await log(f"{gamecode} - Готово.")
 
 
 @dp.message_handler(content_types=["text"])
