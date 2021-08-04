@@ -295,6 +295,36 @@ async def dice(message):
     await log(f"{gamecode} - Готово.")
 
 
+@dp.message_handler(commands=["fact"])
+async def fact(message):
+    await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
+    await log("Запрошен факт.")
+    howmanyfacts = 5
+    send_fact_mess = "Произошла ошибка!"
+    rnd_fact = randint(1, howmanyfacts)
+
+    #  elif? Нет, не учили)
+
+    if rnd_fact == 1:
+        send_fact_mess = f"Данный бот является FOSS проектом. Это означает, что его <a href='github.com/KUKURUZKA165/roulette-telegram-bot'>исходный код</a> открыт всем желающим. Любой может проверить честность его работы :)"
+    else:
+        if rnd_fact == 2:
+            send_fact_mess = f"Случайность в данном боте реализована через атмосферный шум (random.org). Соременные технологии не способны предугадать результат вашей игры."
+        else:
+            if rnd_fact == 3:
+                send_fact_mess = f"Бот знает только {howmanyfacts} фактов о себе. Он просто перебирает факты случайным образом и отправяет вам."
+            else:
+                if rnd_fact == 4:
+                    send_fact_mess = f"Этот факт ещё не придумали."
+                else:
+                    if rnd_fact == 5:
+                        send_fact_mess = f"Даже если бы все казино использовали такой же способ получения случайных чисел, как у нас, они бы всё равно вероятнее всего оставались в плюсе."
+
+    await bot.send_message(message.chat.id, "<b>Интересный факт:</b>\n" + send_fact_mess, parse_mode="html", disable_web_page_preview=True)
+
+    await log(f"Я отправил факт {rnd_fact} из {howmanyfacts}. Его содержание:\n{send_fact_mess}")
+
+
 @dp.message_handler(content_types=["text"])
 async def mess(message):
     get_message_bot = message.text.strip().lower()
