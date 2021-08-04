@@ -33,7 +33,7 @@ async def start(message):
     markup1 = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
     btnr = types.KeyboardButton("Играть")
     btna = types.KeyboardButton("Автор")
-    btnd = types.KeyboardButton("Отказ от ответственности")
+    btnd = types.KeyboardButton("Случайный факт")
     markup1.add(btnd, btna, btnr)
 
     send_mess = f"<b>Привет, {message.from_user.first_name}! В этом боте ты сможешь крутить рулетку.</b>"
@@ -45,7 +45,7 @@ async def start(message):
     send_mess = "<b>Важно для владельцев групп: </b>\nУ бота ограничен доступ к сообщениям в группах на уровне Telegram API. Он не сможет за вами подглядывать :)\n<b><a href='https://core.telegram.org/bots#privacy-mode'>Подробнее</a></b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html", disable_web_page_preview=True)
 
-    send_mess = "<b>Вот список доступных команд:</b>\n\n<b>/roll</b> - Играть в рулетку (Имеет аналог на клавиатуре)\n\n<b>/orlanka</b> - Играть в орлянку (орёл или решка).\n\n<b>/dice</b> - Подбросить кости\n\n<b>/disclaimer</b> - Отказ от ответственности (Имеет аналог на клавиатуре)\n\n<b>/author</b> - Автор бота (Имеет аналог на клавиатуре)\n\n<b>/ping</b> - Понг!\n\n<b>/keyboard</b> - Открыть заново клавиатуру для игры. Полезно в группах\n\n\n<b>Или пользуйся клавиатурой с кнопками:</b>"
+    send_mess = "<b>Вот список доступных команд:</b>\n\n<b>/roll</b> - Играть в рулетку (Имеет аналог на клавиатуре)\n\n<b>/orlanka</b> - Играть в орлянку (орёл или решка)\n\n<b>/dice</b> - Подбросить кости\n\n<b>/fact</b> - Случаный факт про этого бота (Имеет аналог на клавиатуре)\n\n<b>/disclaimer</b> - Отказ от ответственности\n\n<b>/author</b> - Автор бота (Имеет аналог на клавиатуре)\n\n<b>/ping</b> - Понг!\n\n<b>/keyboard</b> - Открыть заново клавиатуру для игры. Полезно в группах\n\n\n<b>Или пользуйся клавиатурой с кнопками:</b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html")
 
     send_mess = "<b>Удачи!</b>"
@@ -225,7 +225,7 @@ async def keyboard(message):
     markup1 = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
     btnr = types.KeyboardButton("Играть")
     btna = types.KeyboardButton("Автор")
-    btnd = types.KeyboardButton("Отказ от ответственности")
+    btnd = types.KeyboardButton("Случайный факт")
     # markup1.add(btnr, btna, btnd)
     markup1.add(btnd, btna, btnr)
     send_mess = f"<b>Клавиатура открыта!</b>"
@@ -335,8 +335,8 @@ async def mess(message):
         if get_message_bot == "автор":
             await author(message)
         else:
-            if get_message_bot == "отказ от ответственности":
-                await disclaimer(message)
+            if get_message_bot == "случайный факт":
+                await fact(message)
             else:
                 await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-\nПрислал(а): {message.text}")
 
