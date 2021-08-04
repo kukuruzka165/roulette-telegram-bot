@@ -3,20 +3,26 @@ import time
 from aiogram import Bot, Dispatcher, executor, types
 from random import randint
 import asyncio
+import requests
 
 
 bot = Bot(token=TOKEN)
-dp = Dispatcher(bot)  # Надо было срочно переходить на аиограм, а я хз, что это значит. Ладно, хай так и будет
+dp = Dispatcher(bot)
 
 print("Я жив!")
 print("Спасибо, что запустил(а) меня!")
 
 
 async def log(text):
-    #  await bot.send_message(chat_id='grp_id', text=text)
     print(text)
     with open('log.txt', 'a', encoding="utf-8") as file:
         file.write(f"\n{text}")
+
+
+def randomorg_parse(number):
+    site = requests.get(f'https://www.random.org/integers/?num=1&min=1&max={number}&col=1&base=10&format=plain&rnd=new')
+    randomorg_string = int("".join(c for c in site.text if c.isdecimal()))
+    return randomorg_string
 
 
 @dp.message_handler(commands=["start"])
@@ -53,18 +59,18 @@ async def roll(message):
     await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
     gamecode = randint(1000, 9999)
     await log(f"{gamecode} - Запрошено кручение!")
+    send_mess = "<b>Ожидание ответа от random.org</b>"
+    roll_mess = await bot.send_message(message.chat.id, send_mess, parse_mode="html", disable_web_page_preview=True)
+    roll_mess_id = roll_mess.message_id
 
-    #  gif_mess = await bot.send_animation(message.chat.id, gif_id)
-    #  gif_mess_id = gif_mess.message_id
-
-    rnd_sleep = randint(1, 3)
-    rnd = randint(1, 37)
+    #  rnd_sleep = randint(1, 3)
+    #  rnd = randint(1, 37)
+    rnd = randomorg_parse(37)
     await log(f"{gamecode} - Выпал вариант {rnd} из 37.")
-    #  await log(f"Запрошено кручение!\nВыпал вариант {rnd} из 37")
 
     #  elif? Нет, не учили)
 
-    result = "Ошибка!"
+    result = "Ошибка. Вероятнее всего проблема на стороне random.org"
     if rnd == 1:
         result = "Зеро! 🟢 Зелёный"
     else:
@@ -175,20 +181,12 @@ async def roll(message):
                                                                                                                                                 else:
                                                                                                                                                     if rnd == 37:
                                                                                                                                                         result = "26, ⚫ Чёрный"
-    #  await bot.delete_message(chat_id=message.chat.id, message_id=gif_mess_id)
-    #  await bot.delete_message(chat_id=message.chat.id, message_id=roll_mess_id)
 
-    send_mess = "<b>Крутим барабан... </b>"
-    roll_mess = await bot.send_message(message.chat.id, send_mess, parse_mode="html")
-    roll_mess_id = roll_mess.message_id
-    await log(f"{gamecode} - Результат - {result}. Ждём {rnd_sleep} сек...")
-    await asyncio.sleep(rnd_sleep)
+    await log(f"{gamecode} - Результат - {result}.")  # Ждём {rnd_sleep} сек...")
+    #  await asyncio.sleep(rnd_sleep)
 
-    await bot.edit_message_text(chat_id=message.chat.id, message_id=roll_mess_id, text=f"<b>{message.from_user.first_name}, ваш результат:\n{result}</b>", parse_mode="html")
+    await bot.edit_message_text(chat_id=message.chat.id, message_id=roll_mess_id, text=f"<b>{message.from_user.first_name}, ваш результат:\n{result}</b>", parse_mode="html", disable_web_page_preview=True)
     await log(f"{gamecode} - Готово.")
-    #  send_mess = f"<b>{message.from_user.first_name}, ваш результат:\n{result}</b>"
-    #  await bot.send_message(message.chat.id, send_mess, parse_mode="html")
-
 
 
 @dp.message_handler(commands=["ping"])
@@ -239,11 +237,15 @@ async def keyboard(message):
 async def orlanka(message):
     await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
     await log("У меня попросили орла и решку. Делаю.")
-    oreshka = randint(1, 2)
+    send_mess = f"<b>Ожидание ответа от random.org</b>"
+    oreshka_mess = await bot.send_message(message.chat.id, send_mess, parse_mode="html", disable_web_page_preview=True)
+    oreshka_mess_id = oreshka_mess.message_id
+    #  oreshka = randint(1, 2)
+    oreshka = randomorg_parse(2)
 
     #  elif? Нет, не учили)
 
-    resultoreshka = "Ошибка"
+    resultoreshka = "Ошибка. Вероятнее всего проблема на стороне random.org"
     if oreshka == 1:
         await log("Выпал орёл. Засылаю..")
         resultoreshka = "Орёл"
@@ -252,8 +254,7 @@ async def orlanka(message):
             await log("Выпала решка. Засылаю..")
             resultoreshka = "Решка"
 
-    send_mess = f"<b>{message.from_user.first_name}, ваш результат:\n{resultoreshka}</b>"
-    await bot.send_message(message.chat.id, send_mess, parse_mode="html")
+    await bot.edit_message_text(chat_id=message.chat.id, message_id=oreshka_mess_id, text=f"<b>{message.from_user.first_name}, ваш результат:\n{resultoreshka}.</b>", parse_mode="html")
     await log("Отправлено.")
 
 
