@@ -5,12 +5,10 @@ from random import randint
 import asyncio
 import requests
 
-
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
 
-print("Я жив!")
-print("Спасибо, что запустил(а) меня!")
+print(f"   ____                   ____              __     __  __            ____        __ \n  / __ \____  ___  ____  / __ \____  __  __/ /__  / /_/ /____       / __ )____  / /_\n / / / / __ \/ _ \/ __ \/ /_/ / __ \/ / / / / _ \/ __/ __/ _ \     / __  / __ \/ __/\n/ /_/ / /_/ /  __/ / / / _, _/ /_/ / /_/ / /  __/ /_/ /_/  __/    / /_/ / /_/ / /_  \n\____/ .___/\___/_/ /_/_/ |_|\____/\__,_/_/\___/\__/\__/\___/    /_____/\____/\__/  \n    /_/                                                                             ")
 
 
 async def log(text):
@@ -23,6 +21,9 @@ def randomorg_parse(number):
     site = requests.get(f'https://www.random.org/integers/?num=1&min=1&max={number}&col=1&base=10&format=plain&rnd=new')
     randomorg_string = int("".join(c for c in site.text if c.isdecimal()))
     return randomorg_string
+
+
+print(f"Добро пожаловать!\nВремя - {time.ctime()}")
 
 
 @dp.message_handler(commands=["start"])
