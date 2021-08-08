@@ -59,7 +59,7 @@ async def start(message):
 async def roll(message):
     await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
     gamecode = randint(1000, 9999)
-    await log(f"{gamecode} - Запрошено кручение!")
+    await log(f"{gamecode} - Обращение к random.org...")
     send_mess = "<b>Ожидание ответа от random.org</b>"
     roll_mess = await bot.send_message(message.chat.id, send_mess, parse_mode="html", disable_web_page_preview=True)
     roll_mess_id = roll_mess.message_id
@@ -231,16 +231,13 @@ async def keyboard(message):
     markup1.add(btnd, btna, btnr)
     send_mess = f"<b>Клавиатура открыта!</b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html", reply_markup=markup1)
-    await log("Клавиатура открыта)")
+    await log("Клавиатура открыта.")
 
 
 @dp.message_handler(commands=["orlanka"])
 async def orlanka(message):
     await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
-    await log("У меня попросили орла и решку. Делаю.")
-    send_mess = f"<b>Ожидание ответа от random.org</b>"
-    oreshka_mess = await bot.send_message(message.chat.id, send_mess, parse_mode="html", disable_web_page_preview=True)
-    oreshka_mess_id = oreshka_mess.message_id
+    await log("Запрошена орлянка.")
     #  oreshka = randint(1, 2)
     oreshka = randomorg_parse(2)
 
@@ -248,14 +245,15 @@ async def orlanka(message):
 
     resultoreshka = "Ошибка. Вероятнее всего проблема на стороне random.org"
     if oreshka == 1:
-        await log("Выпал орёл. Засылаю..")
+        await log("Выпал орёл. Отправляю...")
         resultoreshka = "Орёл"
     else:
         if oreshka == 2:
-            await log("Выпала решка. Засылаю..")
+            await log("Выпала решка. Отправляю...")
             resultoreshka = "Решка"
 
-    await bot.edit_message_text(chat_id=message.chat.id, message_id=oreshka_mess_id, text=f"<b>{message.from_user.first_name}, ваш результат:\n{resultoreshka}.</b>", parse_mode="html")
+    send_mess = f"<b>{message.from_user.first_name}, ваш результат:\n{resultoreshka}.</b>"
+    await bot.send_message(message.chat.id, send_mess, parse_mode="html", disable_web_page_preview=True)
     await log("Отправлено.")
 
 
