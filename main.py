@@ -8,7 +8,7 @@ import requests
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
 
-print(f"   ____                   ____              __     __  __            ____        __ \n  / __ \____  ___  ____  / __ \____  __  __/ /__  / /_/ /____       / __ )____  / /_\n / / / / __ \/ _ \/ __ \/ /_/ / __ \/ / / / / _ \/ __/ __/ _ \     / __  / __ \/ __/\n/ /_/ / /_/ /  __/ / / / _, _/ /_/ / /_/ / /  __/ /_/ /_/  __/    / /_/ / /_/ / /_  \n\____/ .___/\___/_/ /_/_/ |_|\____/\__,_/_/\___/\__/\__/\___/    /_____/\____/\__/  \n    /_/                                                                             ")
+print(f"   ____                   ____              __     __  __            ____        __ \n  / __ \____  ___  ____  / __ \____  __  __/ /__  / /_/ /____       / __ )____  / /_\n / / / / __ \/ _ \/ __ \/ /_/ / __ \/ / / / / _ \/ __/ __/ _ \     / __  / __ \/ __/\n/ /_/ / /_/ /  __/ / / / _, _/ /_/ / /_/ / /  __/ /_/ /_/  __/    / /_/ / /_/ / /_  \n\____/ .___/\___/_/ /_/_/ |_|\____/\__,_/_/\___/\__/\__/\___/    /_____/\____/\__/   by @anton165\n    /_/                                                                             ")
 
 
 async def log(text):
@@ -21,9 +21,6 @@ def randomorg_parse(number):
     site = requests.get(f'https://www.random.org/integers/?num=1&min=1&max={number}&col=1&base=10&format=plain&rnd=new')
     randomorg_string = int("".join(c for c in site.text if c.isdecimal()))
     return randomorg_string
-
-
-print(f"Добро пожаловать!\nВремя - {time.ctime()}")
 
 
 @dp.message_handler(commands=["start"])
@@ -339,6 +336,7 @@ async def mess(message):
             else:
                 await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-\nПрислал(а): {message.text}")
 
+print(f"Добро пожаловать!")
 
 if __name__ == '__main__':
     executor.start_polling(dp)
