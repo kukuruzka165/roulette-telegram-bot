@@ -55,10 +55,10 @@ async def start(message):
 @dp.message_handler(commands=["roll"])
 async def roll(message):
     await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
-    gamecode = randint(1000, 9999)
-    await log(f"{gamecode} - Обращение к random.org...")
     send_mess = "<b>Ожидание ответа от random.org</b>"
     roll_mess = await bot.send_message(message.chat.id, send_mess, parse_mode="html", disable_web_page_preview=True)
+    gamecode = randint(1000, 9999)
+    await log(f"{gamecode} - Обращение к random.org...")
     roll_mess_id = roll_mess.message_id
 
     #  rnd_sleep = randint(1, 3)
@@ -211,7 +211,7 @@ async def disclaimer(message):
 async def author(message):
     await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
     await log("Запрошен автор.")
-    send_mess = f"<b>🧑🏻‍💻 Мой автор - @anton165</b>"
+    send_mess = f"<b>🧑🏻‍💻 Мой автор - @anton165\nЕму можно давать идеи для новых функций в боте.</b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html")
     await log("Автор заслан)")
 
@@ -234,6 +234,9 @@ async def keyboard(message):
 @dp.message_handler(commands=["orlanka"])
 async def orlanka(message):
     await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
+    send_mess = "<b>Ожидание ответа от random.org</b>"
+    oreshka_mess = await bot.send_message(message.chat.id, send_mess, parse_mode="html", disable_web_page_preview=True)
+    oreshka_mess_id = oreshka_mess.message_id
     await log("Запрошена орлянка.")
     #  oreshka = randint(1, 2)
     oreshka = randomorg_parse(2)
@@ -249,8 +252,7 @@ async def orlanka(message):
             await log("Выпала решка. Отправляю...")
             resultoreshka = "Решка"
 
-    send_mess = f"<b>{message.from_user.first_name}, ваш результат:\n{resultoreshka}.</b>"
-    await bot.send_message(message.chat.id, send_mess, parse_mode="html", disable_web_page_preview=True)
+    await bot.edit_message_text(chat_id=message.chat.id, message_id=oreshka_mess_id, text=f"<b>{message.from_user.first_name}, ваш результат:\n{resultoreshka}.</b>", parse_mode="html")
     await log("Отправлено.")
 
 
@@ -321,6 +323,22 @@ async def fact(message):
     await log(f"Я отправил факт {rnd_fact} из {howmanyfacts}. Его содержание:\n{send_fact_mess}")
 
 
+@dp.message_handler(commands=["dev"])
+async def shutdown(message):
+    await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
+    await log("Запрошено девменю")
+
+    if message.from_user.id == 537018800:
+        send_mess = f"<b>ДЕВМЕНЮ</b>\n\nПока тут пусто. В скором времени возможно я придумаю функционал для данного меню."
+        await log("Человек оказался админом. Открываю...")
+    else:
+        send_mess = f"Команда <b>/dev</b> доступна только разработчикам и администраторам.</b>"
+        await log("Подстава! Команду запросил не админ")
+
+    await bot.send_message(message.chat.id, send_mess, parse_mode="html")
+    await log("Готово")
+
+
 @dp.message_handler(content_types=["text"])
 async def mess(message):
     get_message_bot = message.text.strip().lower()
@@ -335,6 +353,7 @@ async def mess(message):
                 await fact(message)
             else:
                 await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-\nПрислал(а): {message.text}")
+
 
 print(f"Добро пожаловать!")
 
