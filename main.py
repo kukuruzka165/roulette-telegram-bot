@@ -1,14 +1,19 @@
-from config import TOKEN  # , gif_id
 import time
-from aiogram import Bot, Dispatcher, executor, types
 from random import randint
 import asyncio
+from config import TOKEN  # , gif_id
+from aiogram import Bot, Dispatcher, executor, types
 import requests
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
 
-print(f"   ____                   ____              __     __  __            ____        __ \n  / __ \____  ___  ____  / __ \____  __  __/ /__  / /_/ /____       / __ )____  / /_\n / / / / __ \/ _ \/ __ \/ /_/ / __ \/ / / / / _ \/ __/ __/ _ \     / __  / __ \/ __/\n/ /_/ / /_/ /  __/ / / / _, _/ /_/ / /_/ / /  __/ /_/ /_/  __/    / /_/ / /_/ / /_  \n\____/ .___/\___/_/ /_/_/ |_|\____/\__,_/_/\___/\__/\__/\___/    /_____/\____/\__/   by @anton165\n    /_/                                                                             ")
+print(r"   ____                   ____              __     __  __            ____        __ ")
+print(r"  / __ \____  ___  ____  / __ \____  __  __/ /__  / /_/ /____       / __ )____  / /_")
+print(r" / / / / __ \/ _ \/ __ \/ /_/ / __ \/ / / / / _ \/ __/ __/ _ \     / __  / __ \/ __/")
+print(r"/ /_/ / /_/ /  __/ / / / _, _/ /_/ / /_/ / /  __/ /_/ /_/  __/    / /_/ / /_/ / /_  ")
+print(r"\____/ .___/\___/_/ /_/_/ |_|\____/\__,_/_/\___/\__/\__/\___/    /_____/\____/\__/   by @anton165")
+print(r"    /_/                                                                             ")
 
 
 async def log(text):
