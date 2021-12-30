@@ -9,6 +9,9 @@ from algorithm import *
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
 
+markup1 = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+markup1.add(types.KeyboardButton("Случайный факт"), types.KeyboardButton("Автор"), types.KeyboardButton("Играть"))
+
 print(r"   ____                   ____              __     __  __            ____        __ ")
 print(r"  / __ \____  ___  ____  / __ \____  __  __/ /__  / /_/ /____       / __ )____  / /_")
 print(r" / / / / __ \/ _ \/ __ \/ /_/ / __ \/ / / / / _ \/ __/ __/ _ \     / __  / __ \/ __/")
@@ -33,12 +36,6 @@ def randomorg_parse(number):
 async def start(message):
     await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
     await log("Запрошен старт")
-
-    markup1 = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-    btnr = types.KeyboardButton("Играть")
-    btna = types.KeyboardButton("Автор")
-    btnd = types.KeyboardButton("Случайный факт")
-    markup1.add(btnd, btna, btnr)
 
     send_mess = f"<b>Привет, {message.from_user.first_name}! В этом боте ты сможешь крутить рулетку.</b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html")
@@ -114,15 +111,15 @@ async def author(message):
 async def keyboard(message):
     await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
     await log("Запрошено открытие клавиатуры!")
-    markup1 = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-    btnr = types.KeyboardButton("Играть")
-    btna = types.KeyboardButton("Автор")
-    btnd = types.KeyboardButton("Случайный факт")
-    # markup1.add(btnr, btna, btnd)
-    markup1.add(btnd, btna, btnr)
     send_mess = f"<b>Клавиатура открыта!</b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html", reply_markup=markup1)
     await log("Клавиатура открыта.")
+
+
+@dp.message_handler(commands=['rm_keyboard'])
+async def rm_keyboard(message):
+    send_mess = f"<b>Клавиатура закрыта!</b>"
+    await bot.send_message(message.chat.id, send_mess, parse_mode="html", reply_markup=types.ReplyKeyboardRemove())
 
 
 @dp.message_handler(commands=["orlanka"])
