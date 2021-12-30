@@ -1,7 +1,7 @@
 import time
 from random import randint
 import asyncio
-from config import TOKEN  # , gif_id
+from config import TOKEN
 from aiogram import Bot, Dispatcher, executor, types
 import requests
 from algorithm import *
@@ -11,6 +11,7 @@ dp = Dispatcher(bot)
 
 markup1 = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
 markup1.add(types.KeyboardButton("Случайный факт"), types.KeyboardButton("Автор"), types.KeyboardButton("Играть"))
+helpmsg = "<b>Вот список доступных команд:</b>\n\n<b>/roll</b> - Играть в рулетку (Имеет аналог на клавиатуре)\n\n<b>/orlanka</b> - Играть в орлянку (орёл или решка)\n\n<b>/dice</b> - Подбросить кости\n\n<b>/fact</b> - Случаный факт про этого бота (Имеет аналог на клавиатуре)\n\n<b>/disclaimer</b> - Отказ от ответственности\n\n<b>/author</b> - Автор бота (Имеет аналог на клавиатуре)\n\n<b>/ping</b> - Понг!\n\n<b>/keyboard</b> - Открыть заново клавиатуру для игры\n<b>/rm_keyboard</b> - Закрыть клавиатуру. Полезно в группах\n<b>/help</b> - Показать все команды\n\n\n<b>Или пользуйся клавиатурой с кнопками:</b>"
 
 print(r"   ____                   ____              __     __  __            ____        __ ")
 print(r"  / __ \____  ___  ____  / __ \____  __  __/ /__  / /_/ /____       / __ )____  / /_")
@@ -46,7 +47,7 @@ async def start(message):
     send_mess = "<b>Важно для владельцев групп: </b>\nУ бота ограничен доступ к сообщениям в группах на уровне Telegram API. Он не сможет за вами подглядывать :)\n<b><a href='https://core.telegram.org/bots#privacy-mode'>Подробнее</a></b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html", disable_web_page_preview=True)
 
-    send_mess = "<b>Вот список доступных команд:</b>\n\n<b>/roll</b> - Играть в рулетку (Имеет аналог на клавиатуре)\n\n<b>/orlanka</b> - Играть в орлянку (орёл или решка)\n\n<b>/dice</b> - Подбросить кости\n\n<b>/fact</b> - Случаный факт про этого бота (Имеет аналог на клавиатуре)\n\n<b>/disclaimer</b> - Отказ от ответственности\n\n<b>/author</b> - Автор бота (Имеет аналог на клавиатуре)\n\n<b>/ping</b> - Понг!\n\n<b>/keyboard</b> - Открыть заново клавиатуру для игры. Полезно в группах\n\n\n<b>Или пользуйся клавиатурой с кнопками:</b>"
+    send_mess = helpmsg
     await bot.send_message(message.chat.id, send_mess, parse_mode="html")
 
     send_mess = "<b>Удачи!</b>"
@@ -64,8 +65,6 @@ async def roll(message):
     await log(f"{gamecode} - Обращение к random.org...")
     roll_mess_id = roll_mess.message_id
 
-    #  rnd_sleep = randint(1, 3)
-    #  rnd = randint(1, 37)
     rnd = randomorg_parse(37)
     await log(f"{gamecode} - Выпал вариант {rnd} из 37.")
 
@@ -129,10 +128,7 @@ async def orlanka(message):
     oreshka_mess = await bot.send_message(message.chat.id, send_mess, parse_mode="html", disable_web_page_preview=True)
     oreshka_mess_id = oreshka_mess.message_id
     await log("Запрошена орлянка.")
-    #  oreshka = randint(1, 2)
     oreshka = randomorg_parse(2)
-
-    #  elif? Нет, не учили)
 
     resultoreshka = "Ошибка. Вероятнее всего проблема на стороне random.org"
     if oreshka == 1:
@@ -157,8 +153,6 @@ async def dice(message):
     await log(f"{gamecode} - Подкинул. Результат: {dice_message.dice.value}. Ждём {dice_sleep} сек...")
     send_mess = f"<b>Пожалйста подождите..</b>"
     dice_comment_message = await bot.send_message(message.chat.id, send_mess, parse_mode="html")
-
-    #  elif? Нет, не учили)
 
     dice_emoji = ""
     if dice_message.dice.value == 1:
@@ -214,18 +208,11 @@ async def fact(message):
     await log(f"Я отправил факт {rnd_fact} из {howmanyfacts}. Его содержание:\n{send_fact_mess}")
 
 
-@dp.message_handler(commands=["dev"])
-async def shutdown(message):
+@dp.message_handler(commands=["help"])
+async def help_command(message):
     await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
-    await log("Запрошено девменю")
-
-    if message.from_user.id == 537018800:
-        send_mess = f"<b>ДЕВМЕНЮ</b>\n\nПока тут пусто. В скором времени возможно я придумаю функционал для данного меню."
-        await log("Человек оказался админом. Открываю...")
-    else:
-        send_mess = f"Команда <b>/dev</b> доступна только разработчикам и администраторам.</b>"
-        await log("Подстава! Команду запросил не админ")
-
+    await log("Запрошена помощь")
+    send_mess = helpmsg
     await bot.send_message(message.chat.id, send_mess, parse_mode="html")
     await log("Готово")
 
@@ -247,7 +234,7 @@ async def mess(message):
                 if message.from_user.id == message.chat.id:
                     send_mess = f"<b>Я вас не понял :(</b>"
                     await bot.send_message(message.chat.id, send_mess, parse_mode="html")
-                    await log("Отправил пользователю, что я его не понял")  # Позже добавить /help, и отправлять его сюда
+                    await log("Отправил пользователю, что я его не понял")
 
 
 print(f"Добро пожаловать!")
