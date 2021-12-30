@@ -247,6 +247,10 @@ async def mess(message):
                 await fact(message)
             else:
                 await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-\nПрислал(а): {message.text}")
+                if message.from_user.id == message.chat.id:
+                    send_mess = f"<b>Я вас не понял :(</b>"
+                    await bot.send_message(message.chat.id, send_mess, parse_mode="html")
+                    await log("Отправил пользователю, что я его не понял")  # Позже добавить /help, и отправлять его сюда
 
 
 print(f"Добро пожаловать!")
