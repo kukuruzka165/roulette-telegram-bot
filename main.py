@@ -11,7 +11,7 @@ dp = Dispatcher(bot)
 
 markup1 = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
 markup1.add(types.KeyboardButton("Случайный факт"), types.KeyboardButton("Автор"), types.KeyboardButton("Играть"))
-helpmsg = "<b>Вот список доступных команд:</b>\n\n<b>/roll</b> - Играть в рулетку (Имеет аналог на клавиатуре)\n\n<b>/orlanka</b> - Играть в орлянку (орёл или решка)\n\n<b>/dice</b> - Подбросить кости\n\n<b>/fact</b> - Случаный факт про этого бота (Имеет аналог на клавиатуре)\n\n<b>/disclaimer</b> - Отказ от ответственности\n\n<b>/author</b> - Автор бота (Имеет аналог на клавиатуре)\n\n<b>/ping</b> - Понг!\n\n<b>/keyboard</b> - Открыть заново клавиатуру для игры\n<b>/rm_keyboard</b> - Закрыть клавиатуру. Полезно в группах\n<b>/help</b> - Показать все команды\n\n\n<b>Или пользуйся клавиатурой с кнопками:</b>"
+helpmsg = "<b>Вот список доступных команд:</b>\n\n<b>/roll</b> - Играть в рулетку (Также есть на клавиатуре)\n\n<b>/orlanka</b> - Играть в орлянку (орёл или решка)\n\n<b>/dice</b> - Подбросить кости\n\n<b>/fact</b> - Случаный факт про этого бота (Также есть на клавиатуре)\n\n<b>/disclaimer</b> - Отказ от ответственности\n\n<b>/author</b> - Автор бота (Также есть на клавиатуре)\n\n<b>/ping</b> - Понг!\n\n<b>/keyboard</b> - Открыть заново клавиатуру для игры\n\n<b>/rm_keyboard</b> - Закрыть клавиатуру. Полезно в группах\n\n<b>/help</b> - Показать все команды"
 
 print(r"   ____                   ____              __     __  __            ____        __ ")
 print(r"  / __ \____  ___  ____  / __ \____  __  __/ /__  / /_/ /____       / __ )____  / /_")
@@ -47,7 +47,7 @@ async def start(message):
     send_mess = "<b>Важно для владельцев групп: </b>\nУ бота ограничен доступ к сообщениям в группах на уровне Telegram API. Он не сможет за вами подглядывать :)\n<b><a href='https://core.telegram.org/bots#privacy-mode'>Подробнее</a></b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html", disable_web_page_preview=True)
 
-    send_mess = helpmsg
+    send_mess = helpmsg + "\n\n\n<b>Или пользуйся клавиатурой с кнопками:</b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html")
 
     send_mess = "<b>Удачи!</b>"
@@ -61,19 +61,13 @@ async def roll(message):
     await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
     send_mess = "<b>Ожидание ответа от random.org</b>"
     roll_mess = await bot.send_message(message.chat.id, send_mess, parse_mode="html", disable_web_page_preview=True)
-    gamecode = randint(1000, 9999)
+    gamecode = randint(100, 999)
     await log(f"{gamecode} - Обращение к random.org...")
-    roll_mess_id = roll_mess.message_id
 
     rnd = randomorg_parse(37)
-    await log(f"{gamecode} - Выпал вариант {rnd} из 37.")
-
     result = fun_result(rnd)
-
-    await log(f"{gamecode} - Результат - {result}.")  # Ждём {rnd_sleep} сек...")
-    #  await asyncio.sleep(rnd_sleep)
-
-    await bot.edit_message_text(chat_id=message.chat.id, message_id=roll_mess_id, text=f"<b>{message.from_user.first_name}, ваш результат:\n{result}</b>", parse_mode="html", disable_web_page_preview=True)
+    await log(f"{gamecode} - Результат - {result}.")
+    await bot.edit_message_text(chat_id=message.chat.id, message_id=roll_mess.message_id, text=f"<b>{message.from_user.first_name}, ваш результат:\n{result}</b>", parse_mode="html", disable_web_page_preview=True)
     await log(f"{gamecode} - Готово.")
 
 
@@ -117,36 +111,38 @@ async def keyboard(message):
 
 @dp.message_handler(commands=['rm_keyboard'])
 async def rm_keyboard(message):
+    await log("Запрошено закрытие клавиатуры!")
     send_mess = f"<b>Клавиатура закрыта!</b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html", reply_markup=types.ReplyKeyboardRemove())
+    await log("Клавиатура закрыта.")
 
 
 @dp.message_handler(commands=["orlanka"])
 async def orlanka(message):
     await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
+    gamecode = randint(10, 99)
     send_mess = "<b>Ожидание ответа от random.org</b>"
     oreshka_mess = await bot.send_message(message.chat.id, send_mess, parse_mode="html", disable_web_page_preview=True)
-    oreshka_mess_id = oreshka_mess.message_id
-    await log("Запрошена орлянка.")
+    await log(f"{gamecode} - Запрошена орлянка.")
     oreshka = randomorg_parse(2)
 
     resultoreshka = "Ошибка. Вероятнее всего проблема на стороне random.org"
     if oreshka == 1:
-        await log("Выпал орёл. Отправляю...")
+        await log(f"{gamecode} - Выпал орёл. Отправляю...")
         resultoreshka = "Орёл"
     else:
         if oreshka == 2:
-            await log("Выпала решка. Отправляю...")
+            await log(f"{gamecode} - Выпала решка. Отправляю...")
             resultoreshka = "Решка"
 
-    await bot.edit_message_text(chat_id=message.chat.id, message_id=oreshka_mess_id, text=f"<b>{message.from_user.first_name}, ваш результат:\n{resultoreshka}.</b>", parse_mode="html")
+    await bot.edit_message_text(chat_id=message.chat.id, message_id=oreshka_mess.message_id, text=f"<b>{message.from_user.first_name}, ваш результат:\n{resultoreshka}.</b>", parse_mode="html")
     await log("Отправлено.")
 
 
 @dp.message_handler(commands=["dice"])
 async def dice(message):
     await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
-    gamecode = randint(100, 999)
+    gamecode = randint(10, 99)
     dice_sleep = 3
     await log(f"{gamecode} - Запрошен дайс.")
     dice_message = await bot.send_dice(message.chat.id, emoji="🎲")
@@ -185,8 +181,6 @@ async def fact(message):
     howmanyfacts = 5
     send_fact_mess = "Произошла ошибка!"
     rnd_fact = randint(1, howmanyfacts)
-
-    #  elif? Нет, не учили)
 
     if rnd_fact == 1:
         send_fact_mess = f"Данный бот является FOSS проектом. Это означает, что его <a href='github.com/KUKURUZKA165/roulette-telegram-bot'>исходный код</a> открыт всем желающим. Любой может проверить честность его работы :)"
