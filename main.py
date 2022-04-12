@@ -1,9 +1,9 @@
-import time
+from time import ctime
 from random import randint
-import asyncio
+from asyncio import sleep
 from config import TOKEN
 from aiogram import Bot, Dispatcher, executor, types
-import requests
+from requests import get
 from algorithm import *
 
 bot = Bot(token=TOKEN)
@@ -28,14 +28,14 @@ async def log(text):
 
 
 def randomorg_parse(number):
-    site = requests.get(f'https://www.random.org/integers/?num=1&min=1&max={number}&col=1&base=10&format=plain&rnd=new')
+    site = get(f'https://www.random.org/integers/?num=1&min=1&max={number}&col=1&base=10&format=plain&rnd=new')
     randomorg_string = int("".join(c for c in site.text if c.isdecimal()))
     return randomorg_string
 
 
 @dp.message_handler(commands=["start"])
 async def start(message):
-    await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
+    await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
     await log("Запитаний старт")
 
     send_mess = f"<b>Привіт, {message.from_user.first_name}! У цьому боті ти зможеш крутити рулетку.</b>"
@@ -58,7 +58,7 @@ async def start(message):
 
 @dp.message_handler(commands=["roll"])
 async def roll(message):
-    await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
+    await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
     send_mess = "<b>Очікування відповіді від random.org</b>"
     roll_mess = await bot.send_message(message.chat.id, send_mess, parse_mode="html", disable_web_page_preview=True)
     gamecode = randint(100, 999)
@@ -73,7 +73,7 @@ async def roll(message):
 
 @dp.message_handler(commands=["ping"])
 async def ping(message):
-    await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
+    await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
     await log("Пінг?")
     send_mess = f"<b>Понг! Я живий!</b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html")
@@ -82,7 +82,7 @@ async def ping(message):
 
 @dp.message_handler(commands=["disclaimer"])
 async def disclaimer(message):
-    await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
+    await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
     await log("Запитаний дисклеймер.")
     send_mess = "<b>ДИСКЛЕЙМЕР (ВІДМОВА ВІД ВІДПОВІДАЛЬНОСТІ): </b>Я повністю відмовляюся від результатів використання " \
                 "даного бота не з метою розваги. Бот створений не з комерційною метою, і ніколи таким не " \
@@ -93,7 +93,7 @@ async def disclaimer(message):
 
 @dp.message_handler(commands=["author"])
 async def author(message):
-    await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
+    await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
     await log("Запрошений автор.")
     send_mess = f"<b>🧑🏻‍💻 Мій автор - @anton165\nЙому можна давати ідеї для нових функцій у боті.</b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html")
@@ -102,7 +102,7 @@ async def author(message):
 
 @dp.message_handler(commands=["keyboard"])
 async def keyboard(message):
-    await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
+    await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
     await log("Запрошено відкриття клавіатури!")
     send_mess = f"<b>Клавіатура відкрита!</b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html", reply_markup=markup1)
@@ -111,7 +111,7 @@ async def keyboard(message):
 
 @dp.message_handler(commands=['rm_keyboard'])
 async def rm_keyboard(message):
-    await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
+    await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
     await log("Запитано закриття клавіатури!")
     send_mess = f"<b>Клавіатура закрита!</b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html", reply_markup=types.ReplyKeyboardRemove())
@@ -120,7 +120,7 @@ async def rm_keyboard(message):
 
 @dp.message_handler(commands=["orlanka"])
 async def orlanka(message):
-    await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
+    await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
     gamecode = randint(10, 99)
     send_mess = "<b>Очікування відповіді від random.org</b>"
     oreshka_mess = await bot.send_message(message.chat.id, send_mess, parse_mode="html", disable_web_page_preview=True)
@@ -142,7 +142,7 @@ async def orlanka(message):
 
 @dp.message_handler(commands=["dice"])
 async def dice(message):
-    await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
+    await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
     gamecode = randint(10, 99)
     dice_sleep = 3
     await log(f"{gamecode} - Запрошений дайс.")
@@ -170,14 +170,14 @@ async def dice(message):
                         if dice_message.dice.value == 6:
                             dice_emoji = "⚅"
 
-    await asyncio.sleep(dice_sleep)
+    await sleep(dice_sleep)
     await bot.edit_message_text(chat_id=message.chat.id, message_id=dice_comment_message.message_id, text=f"<b>{message.from_user.first_name}, ваш результат:\n{dice_emoji} {dice_message.dice.value}</b>", parse_mode="html")
     await log(f"{gamecode} - Готово.")
 
 
 @dp.message_handler(commands=["fact"])
 async def fact(message):
-    await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
+    await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
     await log("Запитаний факт.")
     howmanyfacts = 5
     send_fact_mess = "Виникла помилка!"
@@ -205,7 +205,7 @@ async def fact(message):
 
 @dp.message_handler(commands=["help"])
 async def help_command(message):
-    await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
+    await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
     await log("Запитана допомога")
     send_mess = helpmsg
     await bot.send_message(message.chat.id, send_mess, parse_mode="html")
@@ -225,7 +225,7 @@ async def mess(message):
             if get_message_bot == "випадковий факт":
                 await fact(message)
             else:
-                await log(f"--------------------\n{time.ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-\nПрислал(а): {message.text}")
+                await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-\nПрислал(а): {message.text}")
                 if message.from_user.id == message.chat.id:
                     send_mess = f"<b>Я вас не зрозумів :(</b>"
                     await bot.send_message(message.chat.id, send_mess, parse_mode="html")
