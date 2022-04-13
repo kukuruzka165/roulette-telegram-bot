@@ -71,7 +71,7 @@ async def start(message):
     send_mess = "<b>🇺🇦 Слава Україні! 🇺🇦</b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html", reply_markup=markup1)
 
-    await log("Старт відправлено!")
+    await log("Старт надіслано!")
 
 
 @dp.message_handler(commands=["roll"])
@@ -85,8 +85,10 @@ async def roll(message):
     rnd = randomorg_parse(37)
     result = fun_result(rnd)
     await log(f"{gamecode} - Результат - {result}.")
-    await bot.edit_message_text(chat_id=message.chat.id, message_id=roll_mess.message_id, text=f"<b>{message.from_user.first_name}, ваш результат:\n{result}</b>", parse_mode="html", disable_web_page_preview=True)
-    await log(f"{gamecode} - Готово.")
+    await bot.edit_message_text(chat_id=message.chat.id, message_id=roll_mess.message_id,
+                                text=f"<b>{message.from_user.first_name}, ваш результат:\n{result}</b>",
+                                parse_mode="html", disable_web_page_preview=True)
+    await log(f"{gamecode} - Надіслано.")
 
 
 @dp.message_handler(commands=["ping"])
@@ -150,13 +152,14 @@ async def orlanka(message):
     if oreshka == 1:
         await log(f"{gamecode} - Випав орел. Відправляю...")
         resultoreshka = "Орел"
-    else:
-        if oreshka == 2:
-            await log(f"{gamecode} - Випала решка. Відправляю...")
-            resultoreshka = "Решка"
+    elif oreshka == 2:
+        await log(f"{gamecode} - Випала решка. Відправляю...")
+        resultoreshka = "Решка"
 
-    await bot.edit_message_text(chat_id=message.chat.id, message_id=oreshka_mess.message_id, text=f"<b>{message.from_user.first_name}, ваш результат:\n{resultoreshka}.</b>", parse_mode="html")
-    await log("Надіслано.")
+    await bot.edit_message_text(chat_id=message.chat.id, message_id=oreshka_mess.message_id,
+                                text=f"<b>{message.from_user.first_name}, ваш результат:\n{resultoreshka}.</b>",
+                                parse_mode="html")
+    await log(f"{gamecode} - Надіслано.")
 
 
 @dp.message_handler(commands=["dice"])
@@ -173,25 +176,22 @@ async def dice(message):
     dice_emoji = ""
     if dice_message.dice.value == 1:
         dice_emoji = "⚀"
-    else:
-        if dice_message.dice.value == 2:
-            dice_emoji = "⚁"
-        else:
-            if dice_message.dice.value == 3:
-                dice_emoji = "⚂"
-            else:
-                if dice_message.dice.value == 4:
-                    dice_emoji = "⚃"
-                else:
-                    if dice_message.dice.value == 5:
-                        dice_emoji = "⚄"
-                    else:
-                        if dice_message.dice.value == 6:
-                            dice_emoji = "⚅"
+    elif dice_message.dice.value == 2:
+        dice_emoji = "⚁"
+    elif dice_message.dice.value == 3:
+        dice_emoji = "⚂"
+    elif dice_message.dice.value == 4:
+        dice_emoji = "⚃"
+    elif dice_message.dice.value == 5:
+        dice_emoji = "⚄"
+    elif dice_message.dice.value == 6:
+        dice_emoji = "⚅"
 
     await sleep(dice_sleep)
-    await bot.edit_message_text(chat_id=message.chat.id, message_id=dice_comment_message.message_id, text=f"<b>{message.from_user.first_name}, ваш результат:\n{dice_emoji} {dice_message.dice.value}</b>", parse_mode="html")
-    await log(f"{gamecode} - Готово.")
+    await bot.edit_message_text(chat_id=message.chat.id, message_id=dice_comment_message.message_id,
+                                text=f"<b>{message.from_user.first_name}, ваш результат:\n{dice_emoji}"
+                                     f" {dice_message.dice.value}</b>", parse_mode="html")
+    await log(f"{gamecode} - Надіслано.")
 
 
 @dp.message_handler(commands=["fact"])
@@ -206,21 +206,18 @@ async def fact(message):
         send_fact_mess = f"Цей бот є FOSS проектом. Це означає, що його" \
                          f" <a href='github.com/KUKURUZKA165/roulette-telegram-bot'>вихідний код</a>" \
                          f" відкритий усім охочим. Будь-хто може перевірити чесність його роботи :)"
-    else:
-        if rnd_fact == 2:
-            send_fact_mess = f"Випадковість у цьому роботі реалізована через атмосферний шум (random.org)." \
-                             f" Сучасні технології не здатні передбачити результат вашої гри."
-        else:
-            if rnd_fact == 3:
-                send_fact_mess = f"Бот знає тільки {howmanyfacts} фактів себе." \
-                                 f" Він просто перебирає факти випадково і відправляє вам."
-            else:
-                if rnd_fact == 4:
-                    send_fact_mess = f"Цей факт ще не придумали. Я не знаю що тут написати("
-                else:
-                    if rnd_fact == 5:
-                        send_fact_mess = f"Навіть якби всі казино використовували такий самий спосіб отримання" \
-                                         f" випадкових чисел, як у нас, вони все одно залишалися б у плюсі."
+    elif rnd_fact == 2:
+        send_fact_mess = f"Випадковість у цьому роботі реалізована через атмосферний шум (random.org)." \
+                         f" Сучасні технології не здатні передбачити результат вашої гри."
+    elif rnd_fact == 3:
+        send_fact_mess = f"Бот знає тільки {howmanyfacts} фактів себе." \
+                         f" Він просто перебирає факти випадково і відправляє вам."
+    elif rnd_fact == 4:
+        send_fact_mess = f"Цей факт ще не придумали. Я не знаю що тут написати("
+
+    elif rnd_fact == 5:
+        send_fact_mess = f"Навіть якби всі казино використовували такий самий спосіб отримання" \
+                         f" випадкових чисел, як у нас, вони все одно залишалися б у плюсі."
 
     await bot.send_message(message.chat.id, "<b>Цікавий факт:</b>\n" + send_fact_mess, parse_mode="html",
                            disable_web_page_preview=True)
@@ -240,24 +237,20 @@ async def help_command(message):
 @dp.message_handler(content_types=["text"])
 async def mess(message):
     get_message_bot = message.text.strip().lower()
-
     if get_message_bot == "грати":
         await roll(message)
+    elif get_message_bot == "закрити ❌":
+        await rm_keyboard(message)
+    elif get_message_bot == "дайс 🎲":
+        await dice(message)
+    elif get_message_bot == "випадковий факт ❓":
+        await fact(message)
     else:
-        if get_message_bot == "закрити ❌":
-            await rm_keyboard(message)
-        else:
-            if get_message_bot == "дайс 🎲":
-                await dice(message)
-            else:
-                if get_message_bot == "випадковий факт ❓":
-                    await fact(message)
-                else:
-                    await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-\nНадіслав(ла): {message.text}")
-                    if message.from_user.id == message.chat.id:
-                        send_mess = f"<b>Я вас не зрозумів :(</b>"
-                        await bot.send_message(message.chat.id, send_mess, parse_mode="html")
-                        await log("Написав користувачеві, що я його не зрозумів")
+        await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-\nНадіслав(ла): {message.text}")
+        if message.from_user.id == message.chat.id:
+            send_mess = f"<b>Я вас не зрозумів :(</b>"
+            await bot.send_message(message.chat.id, send_mess, parse_mode="html")
+            await log("Написав користувачеві, що я його не зрозумів")
 
 
 print(f"Доброго дня, Слава Україні!")
