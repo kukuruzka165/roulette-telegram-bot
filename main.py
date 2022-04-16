@@ -6,6 +6,14 @@ from aiogram import Bot, Dispatcher, executor, types
 from requests import get
 from algorithm import *
 
+print(r"   ____                   ____              __     __  __            ____        __ ")
+print(r"  / __ \____  ___  ____  / __ \____  __  __/ /__  / /_/ /____       / __ )____  / /_")
+print(r" / / / / __ \/ _ \/ __ \/ /_/ / __ \/ / / / / _ \/ __/ __/ _ \     / __  / __ \/ __/")
+print(r"/ /_/ / /_/ /  __/ / / / _, _/ /_/ / /_/ / /  __/ /_/ /_/  __/    / /_/ / /_/ / /_  ")
+print(r"\____/ .___/\___/_/ /_/_/ |_|\____/\__,_/_/\___/\__/\__/\___/    /_____/\____/\__/  ")
+print(r"    /_/                                                                             ")
+
+
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
 
@@ -27,13 +35,6 @@ helpmsg = "<b>Ось список доступних команд:</b>\n\n" \
           "<b>/rm_keyboard</b> - Закрити клавіатуру. Корисно у групах (Також є на клавіатурі)\n\n" \
           "<b>/help</b> - Показати всі команди"
 
-print(r"   ____                   ____              __     __  __            ____        __ ")
-print(r"  / __ \____  ___  ____  / __ \____  __  __/ /__  / /_/ /____       / __ )____  / /_")
-print(r" / / / / __ \/ _ \/ __ \/ /_/ / __ \/ / / / / _ \/ __/ __/ _ \     / __  / __ \/ __/")
-print(r"/ /_/ / /_/ /  __/ / / / _, _/ /_/ / /_/ / /  __/ /_/ /_/  __/    / /_/ / /_/ / /_  ")
-print(r"\____/ .___/\___/_/ /_/_/ |_|\____/\__,_/_/\___/\__/\__/\___/    /_____/\____/\__/  ")
-print(r"    /_/                                                                             ")
-
 
 async def log(text):
     print(text)
@@ -47,9 +48,19 @@ def randomorg_parse(number):
     return randomorg_int
 
 
+async def logheader(msg):
+    await log(f"--------------------\n{ctime()}\n"
+              f"{msg.from_user.first_name} {msg.from_user.last_name} @{msg.from_user.username} id={msg.from_user.id}\n"
+              f"{msg.chat.title} {msg.chat.invite_link} id = {msg.chat.id}\n-")
+
+
+async def keyboardheader():
+    await log("--------------------\nКлавіатура:")
+
+
 @dp.message_handler(commands=["start"])
 async def start(message):
-    await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
+    await logheader(message)
     await log("Запитаний старт")
 
     send_mess = f"<b>Привіт, {message.from_user.first_name}! У цьому боті ти зможеш крутити рулетку.</b>"
@@ -76,7 +87,7 @@ async def start(message):
 
 @dp.message_handler(commands=["roll"])
 async def roll(message):
-    await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
+    await logheader(message)
     send_mess = "<b>Очікування відповіді від random.org</b>"
     roll_mess = await bot.send_message(message.chat.id, send_mess, parse_mode="html", disable_web_page_preview=True)
     gamecode = randint(100, 999)
@@ -93,7 +104,7 @@ async def roll(message):
 
 @dp.message_handler(commands=["ping"])
 async def ping(message):
-    await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
+    await logheader(message)
     await log("Пінг?")
     send_mess = f"<b>Понг! Я живий!</b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html")
@@ -102,7 +113,7 @@ async def ping(message):
 
 @dp.message_handler(commands=["disclaimer"])
 async def disclaimer(message):
-    await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
+    await logheader(message)
     await log("Запитаний дисклеймер.")
     send_mess = "<b>ДИСКЛЕЙМЕР (ВІДМОВА ВІД ВІДПОВІДАЛЬНОСТІ):" \
                 " </b>Я повністю відмовляюся від результатів використання даного бота не з метою розваги." \
@@ -114,7 +125,7 @@ async def disclaimer(message):
 
 @dp.message_handler(commands=["author"])
 async def author(message):
-    await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
+    await logheader(message)
     await log("Запрошений автор.")
     send_mess = f"<b>🧑🏻‍💻 Мій автор - @anton165\nЙому можна давати ідеї для нових функцій у боті.</b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html")
@@ -123,7 +134,7 @@ async def author(message):
 
 @dp.message_handler(commands=["keyboard"])
 async def keyboard(message):
-    await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
+    await logheader(message)
     await log("Запрошено відкриття клавіатури!")
     send_mess = f"<b>Клавіатура відкрита!</b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html", reply_markup=markup1)
@@ -132,7 +143,7 @@ async def keyboard(message):
 
 @dp.message_handler(commands=['rm_keyboard'])
 async def rm_keyboard(message):
-    await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
+    await logheader(message)
     await log("Запитано закриття клавіатури!")
     send_mess = f"<b>Клавіатура закрита!</b>\nДля відкриття напишіть <b>/keyboard</b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html", reply_markup=types.ReplyKeyboardRemove())
@@ -141,7 +152,7 @@ async def rm_keyboard(message):
 
 @dp.message_handler(commands=["orlanka"])
 async def orlanka(message):
-    await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
+    await logheader(message)
     gamecode = randint(10, 99)
     send_mess = "<b>Очікування відповіді від random.org</b>"
     oreshka_mess = await bot.send_message(message.chat.id, send_mess, parse_mode="html", disable_web_page_preview=True)
@@ -164,7 +175,7 @@ async def orlanka(message):
 
 @dp.message_handler(commands=["dice"])
 async def dice(message):
-    await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
+    await logheader(message)
     gamecode = randint(10, 99)
     dice_sleep = 3
     await log(f"{gamecode} - Запрошений дайс.")
@@ -196,7 +207,7 @@ async def dice(message):
 
 @dp.message_handler(commands=["fact"])
 async def fact(message):
-    await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
+    await logheader(message)
     await log("Запитаний факт.")
     howmanyfacts = 5
     send_fact_mess = "Виникла помилка!"
@@ -227,7 +238,7 @@ async def fact(message):
 
 @dp.message_handler(commands=["help"])
 async def help_command(message):
-    await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-")
+    await logheader(message)
     await log("Запитана допомога")
     send_mess = helpmsg
     await bot.send_message(message.chat.id, send_mess, parse_mode="html")
@@ -238,15 +249,21 @@ async def help_command(message):
 async def mess(message):
     get_message_bot = message.text.strip().lower()
     if get_message_bot == "грати":
+        await keyboardheader()
         await roll(message)
     elif get_message_bot == "закрити ❌":
+        await keyboardheader()
         await rm_keyboard(message)
     elif get_message_bot == "дайс 🎲":
+        await keyboardheader()
         await dice(message)
     elif get_message_bot == "випадковий факт ❓":
+        await keyboardheader()
         await fact(message)
     else:
-        await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name} @{message.from_user.username} id={message.from_user.id}\n{message.chat.title} {message.chat.invite_link} id = {message.chat.id}\n-\nНадіслав(ла): {message.text}")
+        await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name}"
+                  f" @{message.from_user.username} id={message.from_user.id}\n{message.chat.title}"
+                  f" {message.chat.invite_link} id = {message.chat.id}\n-\nНадіслав(ла): {message.text}")
         if message.from_user.id == message.chat.id:
             send_mess = f"<b>Я вас не зрозумів :(</b>"
             await bot.send_message(message.chat.id, send_mess, parse_mode="html")
