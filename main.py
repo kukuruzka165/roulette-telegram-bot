@@ -1,10 +1,10 @@
 from time import ctime
 from random import randint
 from asyncio import sleep
-from config import TOKEN
 from aiogram import Bot, Dispatcher, executor, types
 from requests import get
 from algorithm import *
+from config import TOKEN, enablelog, helpmsg
 
 print(r"   ____                   ____              __     __  __            ____        __ ")
 print(r"  / __ \____  ___  ____  / __ \____  __  __/ /__  / /_/ /____       / __ )____  / /_")
@@ -23,23 +23,12 @@ markup1.add(types.KeyboardButton("Випадковий факт ❓"),
             types.KeyboardButton("Закрити ❌"),
             types.KeyboardButton("Грати"))
 
-helpmsg = "<b>Ось список доступних команд:</b>\n\n" \
-          "<b>/roll</b> - Грати в рулетку (Також є на клавіатурі)\n\n" \
-          "<b>/orlanka</b> - Грати в орлянку (орел або решка)\n\n" \
-          "<b>/dice</b> - Підкинути кістки\n\n" \
-          "<b>/fact</b> - Випадковий факт про цього робота (Також є на клавіатурі)\n\n" \
-          "<b>/disclaimer</b> - Відмова від відповідальності\n\n" \
-          "<b>/author</b> - Автор бота\n\n" \
-          "<b>/ping</b> - Понг!\n\n" \
-          "<b>/keyboard</b> - Відкрити заново клавіатуру для гри\n\n" \
-          "<b>/rm_keyboard</b> - Закрити клавіатуру. Корисно у групах (Також є на клавіатурі)\n\n" \
-          "<b>/help</b> - Показати всі команди"
-
 
 async def log(text):
     print(text)
-    with open('log.txt', 'a', encoding="utf-8") as file:
-        file.write(f"\n{text}")
+    if enablelog is True:
+        with open('log.txt', 'a', encoding="utf-8") as file:
+            file.write(f"\n{text}")
 
 
 def randomorg_parse(number):
@@ -52,10 +41,6 @@ async def logheader(msg):
     await log(f"--------------------\n{ctime()}\n"
               f"{msg.from_user.first_name} {msg.from_user.last_name} @{msg.from_user.username} id={msg.from_user.id}\n"
               f"{msg.chat.title} {msg.chat.invite_link} id = {msg.chat.id}\n-")
-
-
-async def keyboardheader():
-    await log("--------------------\nКлавіатура:")
 
 
 @dp.message_handler(commands=["start"])
@@ -71,7 +56,7 @@ async def start(message):
     await bot.send_message(message.chat.id, send_mess, parse_mode="html")
 
     send_mess = "<b>Важливо для власників груп: </b>\n" \
-                "У роботі обмежений доступ до повідомлень у групах на рівні Telegram API." \
+                "В бота налаштований обмежений доступ до повідомлень у групах на рівні Telegram API." \
                 " Він не зможе за вами підглядати :)\n" \
                 "<b><a href='https://core.telegram.org/bots#privacy-mode'>Докладніше</a></b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html", disable_web_page_preview=True)
@@ -249,16 +234,16 @@ async def help_command(message):
 async def mess(message):
     get_message_bot = message.text.strip().lower()
     if get_message_bot == "грати":
-        await keyboardheader()
+        await log("--------------------\nКлавіатура:")
         await roll(message)
     elif get_message_bot == "закрити ❌":
-        await keyboardheader()
+        await log("--------------------\nКлавіатура:")
         await rm_keyboard(message)
     elif get_message_bot == "дайс 🎲":
-        await keyboardheader()
+        await log("--------------------\nКлавіатура:")
         await dice(message)
     elif get_message_bot == "випадковий факт ❓":
-        await keyboardheader()
+        await log("--------------------\nКлавіатура:")
         await fact(message)
     else:
         await log(f"--------------------\n{ctime()}\n{message.from_user.first_name} {message.from_user.last_name}"
