@@ -1,0 +1,6 @@
+*.xml
+log.txt
+*.pyc
+*.iml
+parser.py
+/.idea
