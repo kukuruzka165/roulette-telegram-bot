@@ -4,7 +4,7 @@ from asyncio import sleep
 from aiogram import Bot, Dispatcher, executor, types
 from requests import get
 from algorithm import *
-from config import TOKEN, enablelog, helpmsg
+from config import *
 
 print(r"   ____                   ____              __     __  __            ____        __ ")
 print(r"  / __ \____  ___  ____  / __ \____  __  __/ /__  / /_/ /____       / __ )____  / /_")
@@ -31,16 +31,15 @@ async def log(text):
             file.write(f"\n{text}")
 
 
-def randomorg_parse(number):
-    site = get(f'https://www.random.org/integers/?num=1&min=1&max={number}&col=1&base=10&format=plain&rnd=new')
-    randomorg_int = int("".join(c for c in site.text if c.isdecimal()))
-    return randomorg_int
-
-
 async def logheader(msg):
     await log(f"--------------------\n{ctime()}\n"
               f"{msg.from_user.first_name} {msg.from_user.last_name} @{msg.from_user.username} id={msg.from_user.id}\n"
               f"{msg.chat.title} {msg.chat.invite_link} id = {msg.chat.id}\n-")
+
+
+async def randomorg_parse(number):
+    site = get(f'https://www.random.org/integers/?num=1&min=1&max={number}&col=1&base=10&format=plain&rnd=new')
+    return int(site.text)
 
 
 @dp.message_handler(commands=["start"])
@@ -78,7 +77,7 @@ async def roll(message):
     gamecode = randint(100, 999)
     await log(f"{gamecode} - Звернення до random.org...")
 
-    rnd = randomorg_parse(37)
+    rnd = await randomorg_parse(37)
     result = fun_result(rnd)
     await log(f"{gamecode} - Результат - {result}.")
     await bot.edit_message_text(chat_id=message.chat.id, message_id=roll_mess.message_id,
@@ -100,11 +99,7 @@ async def ping(message):
 async def disclaimer(message):
     await logheader(message)
     await log("Запитаний дисклеймер.")
-    send_mess = "<b>ДИСКЛЕЙМЕР (ВІДМОВА ВІД ВІДПОВІДАЛЬНОСТІ):" \
-                " </b>Я повністю відмовляюся від результатів використання даного бота не з метою розваги." \
-                " Бот створений не з комерційною метою, і ніколи таким не " \
-                "стане!\n\n<b>Коротко:</b> Ставок нема."
-    await bot.send_message(message.chat.id, send_mess, parse_mode="html")
+    await bot.send_message(message.chat.id, disclaimer_text, parse_mode="html")
     await log("Дисклеймер відправлено.")
 
 
@@ -142,7 +137,7 @@ async def orlanka(message):
     send_mess = "<b>Очікування відповіді від random.org</b>"
     oreshka_mess = await bot.send_message(message.chat.id, send_mess, parse_mode="html", disable_web_page_preview=True)
     await log(f"{gamecode} - Запитана орлянка.")
-    oreshka = randomorg_parse(2)
+    oreshka = await randomorg_parse(2)
 
     resultoreshka = "Помилка. Скоріше за все проблема на стороні random.org"
     if oreshka == 1:
@@ -194,26 +189,19 @@ async def dice(message):
 async def fact(message):
     await logheader(message)
     await log("Запитаний факт.")
-    howmanyfacts = 5
     send_fact_mess = "Виникла помилка!"
     rnd_fact = randint(1, howmanyfacts)
 
     if rnd_fact == 1:
-        send_fact_mess = f"Цей бот є FOSS проектом. Це означає, що його" \
-                         f" <a href='github.com/KUKURUZKA165/roulette-telegram-bot'>вихідний код</a>" \
-                         f" відкритий усім охочим. Будь-хто може перевірити чесність його роботи :)"
+        send_fact_mess = fact1
     elif rnd_fact == 2:
-        send_fact_mess = f"Випадковість у цьому роботі реалізована через атмосферний шум (random.org)." \
-                         f" Сучасні технології не здатні передбачити результат вашої гри."
+        send_fact_mess = fact2
     elif rnd_fact == 3:
-        send_fact_mess = f"Бот знає тільки {howmanyfacts} фактів себе." \
-                         f" Він просто перебирає факти випадково і відправляє вам."
+        send_fact_mess = fact3
     elif rnd_fact == 4:
-        send_fact_mess = f"Цей факт ще не придумали. Я не знаю що тут написати("
-
+        send_fact_mess = fact4
     elif rnd_fact == 5:
-        send_fact_mess = f"Навіть якби всі казино використовували такий самий спосіб отримання" \
-                         f" випадкових чисел, як у нас, вони все одно залишалися б у плюсі."
+        send_fact_mess = fact5
 
     await bot.send_message(message.chat.id, "<b>Цікавий факт:</b>\n" + send_fact_mess, parse_mode="html",
                            disable_web_page_preview=True)
