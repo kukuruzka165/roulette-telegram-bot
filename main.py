@@ -2,7 +2,7 @@ from time import ctime
 from random import randint
 from asyncio import sleep
 from aiogram import Bot, Dispatcher, executor, types
-from requests import get
+from aiohttp import ClientSession
 from algorithm import *
 from config import *
 
@@ -38,8 +38,10 @@ async def logheader(msg):
 
 
 async def randomorg_parse(number):
-    site = get(f'https://www.random.org/integers/?num=1&min=1&max={number}&col=1&base=10&format=plain&rnd=new')
-    return int(site.text)
+    async with ClientSession() as session:
+        async with session.get(f"https://www.random.org/integers/"
+                               f"?num=1&min=1&max={number}&col=1&base=10&format=plain&rnd=new") as response:
+            return int(await response.text())
 
 
 @dp.message_handler(commands=["start"])
