@@ -1,4 +1,4 @@
-from time import ctime
+from time import ctime, strftime
 from random import randint
 from asyncio import sleep
 from aiogram import Bot, Dispatcher, executor, types
@@ -10,7 +10,7 @@ print(r"   ____                   ____              __     __  __            ___
 print(r"  / __ \____  ___  ____  / __ \____  __  __/ /__  / /_/ /____       / __ )____  / /_")
 print(r" / / / / __ \/ _ \/ __ \/ /_/ / __ \/ / / / / _ \/ __/ __/ _ \     / __  / __ \/ __/")
 print(r"/ /_/ / /_/ /  __/ / / / _, _/ /_/ / /_/ / /  __/ /_/ /_/  __/    / /_/ / /_/ / /_  ")
-print(r"\____/ .___/\___/_/ /_/_/ |_|\____/\__,_/_/\___/\__/\__/\___/    /_____/\____/\__/  ")
+print(r"\____/ .___/\___/_/ /_/_/ |_|\____/\____/_/\___/\__/\__/\___/    /_____/\____/\__/  ")
 print(r"    /_/                                                                             ")
 
 
@@ -23,11 +23,13 @@ markup1.add(types.KeyboardButton("Випадковий факт ❓"),
             types.KeyboardButton("Закрити ❌"),
             types.KeyboardButton("Грати"))
 
+logfilename = f"log_{strftime('%d.%m.%y_%H.%M')}"  # 21.04.22_18.17
+
 
 async def log(text):
     print(text)
     if enablelog is True:
-        with open('log.txt', 'a', encoding="utf-8") as file:
+        with open(f'{logfilename}.txt', 'a', encoding="utf-8") as file:
             file.write(f"\n{text}")
 
 
@@ -244,8 +246,6 @@ async def mess(message):
             await bot.send_message(message.chat.id, send_mess, parse_mode="html")
             await log("Написав користувачеві, що я його не зрозумів")
 
-
-print(f"Доброго дня, Слава Україні!")
-
 if __name__ == '__main__':
+    print(f"Доброго дня, Слава Україні!")
     executor.start_polling(dp)
