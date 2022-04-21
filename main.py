@@ -37,10 +37,10 @@ async def logheader(msg):
               f"{msg.chat.title} {msg.chat.invite_link} id = {msg.chat.id}\n-")
 
 
-async def randomorg_parse(number):
+async def randomorg_parse(minimum, maximum):
     async with ClientSession() as session:
         async with session.get(f"https://www.random.org/integers/"
-                               f"?num=1&min=1&max={number}&col=1&base=10&format=plain&rnd=new") as response:
+                               f"?num=1&min={minimum}&max={maximum}&col=1&base=10&format=plain&rnd=new") as response:
             return int(await response.text())
 
 
@@ -79,7 +79,7 @@ async def roll(message):
     gamecode = randint(100, 999)
     await log(f"{gamecode} - Звернення до random.org...")
 
-    rnd = await randomorg_parse(37)
+    rnd = await randomorg_parse(1, 37)
     result = fun_result(rnd)
     await log(f"{gamecode} - Результат - {result}.")
     await bot.edit_message_text(chat_id=message.chat.id, message_id=roll_mess.message_id,
@@ -139,7 +139,7 @@ async def orlanka(message):
     send_mess = "<b>Очікування відповіді від random.org</b>"
     oreshka_mess = await bot.send_message(message.chat.id, send_mess, parse_mode="html", disable_web_page_preview=True)
     await log(f"{gamecode} - Запитана орлянка.")
-    oreshka = await randomorg_parse(2)
+    oreshka = await randomorg_parse(1, 2)
 
     resultoreshka = "Помилка. Скоріше за все проблема на стороні random.org"
     if oreshka == 1:

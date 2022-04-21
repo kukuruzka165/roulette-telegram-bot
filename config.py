@@ -1,8 +1,8 @@
-TOKEN = "bot_token"
 # token
+TOKEN = "1893429550:AAENjFILcj6TRQZm7HLDqIeGeBwkbBmb6D4"
 
 # options
-enablelog = True
+enablelog = False
 howmanyfacts = 5
 
 # strings
