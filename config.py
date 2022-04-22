@@ -1,11 +1,12 @@
-# token
 TOKEN = "bot_token"
-
 # options
 enablelog = True
 howmanyfacts = 5
+logfoldername = "logs"  # "." if you don't want any folder
+logfilename_date = "%d.%m.%y_%H.%M"  # 21.04.22_18.17
 
-# strings
+
+# long strings
 helpmsg = "<b>Ось список доступних команд:</b>\n\n" \
           "<b>/roll</b> - Грати в рулетку (Також є на клавіатурі)\n\n" \
           "<b>/orlanka</b> - Грати в орлянку (орел або решка)\n\n" \

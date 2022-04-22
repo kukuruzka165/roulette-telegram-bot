@@ -16,6 +16,7 @@ print(r"    /_/                                                                 
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
+logfilename = f"log_{strftime(logfilename_date)}"
 
 markup1 = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=3)
 markup1.add(types.KeyboardButton("Випадковий факт ❓"),
@@ -23,13 +24,11 @@ markup1.add(types.KeyboardButton("Випадковий факт ❓"),
             types.KeyboardButton("Закрити ❌"),
             types.KeyboardButton("Грати"))
 
-logfilename = f"log_{strftime('%d.%m.%y_%H.%M')}"  # 21.04.22_18.17
-
 
 async def log(text):
     print(text)
     if enablelog is True:
-        with open(f'{logfilename}.txt', 'a', encoding="utf-8") as file:
+        with open(f'{logfoldername}/{logfilename}.txt', 'a', encoding="utf-8") as file:
             file.write(f"\n{text}")
 
 
