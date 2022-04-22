@@ -3,7 +3,7 @@ from random import randint
 from asyncio import sleep
 from aiogram import Bot, Dispatcher, executor, types
 from aiohttp import ClientSession
-from algorithm import *
+from longfunctions import *
 from config import *
 
 print(r"   ____                   ____              __     __  __            ____        __ ")
@@ -81,7 +81,7 @@ async def roll(message):
     await log(f"{gamecode} - Звернення до random.org...")
 
     rnd = await randomorg_parse(1, 37)
-    result = fun_result(rnd)
+    result = roll_function(rnd)
     await log(f"{gamecode} - Результат - {result}.")
     await bot.edit_message_text(chat_id=message.chat.id, message_id=roll_mess.message_id,
                                 text=f"<b>{message.from_user.first_name}, ваш результат:\n{result}</b>",

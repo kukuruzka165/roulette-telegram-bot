@@ -1,4 +1,4 @@
-def fun_result(rnd):
+def roll_function(rnd):
     result = "Помилка. Скоріше за все проблема на стороні random.org"
     if rnd == 1:
         result = "Зеро! 🟢 Зелений"
