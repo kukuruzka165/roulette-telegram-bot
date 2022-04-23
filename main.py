@@ -80,13 +80,41 @@ async def roll(message):
     gamecode = randint(100, 999)
     await log(f"{gamecode} - Звернення до random.org...")
 
-    rnd = await randomorg_parse(1, 37)
-    result = roll_function(rnd)
+    result = roll_function(await randomorg_parse(1, 37))
+
     await log(f"{gamecode} - Результат - {result}.")
     await bot.edit_message_text(chat_id=message.chat.id, message_id=roll_mess.message_id,
                                 text=f"<b>{message.from_user.first_name}, ваш результат:\n{result}</b>",
                                 parse_mode="html", disable_web_page_preview=True)
     await log(f"{gamecode} - Надіслано.")
+
+
+@dp.message_handler(commands=["rnd"])
+async def rnd_command(message):
+    await logheader(message)
+    await log("Запитаний rnd.")
+
+    if message.text == "/rnd":
+        await bot.send_message(message.chat.id, rnd_no_args, parse_mode="html")
+        await log("Людина написала команду без аргументів.")
+    else:
+        minmax = message.text.replace("/rnd ", "")
+        min_num, max_mun = minmax.split()
+        min_num_int, max_mun_int = int(min_num), int(max_mun)
+
+        send_mess = "<b>Очікування відповіді від random.org</b>"
+        rnd_mess = await bot.send_message(message.chat.id, send_mess, parse_mode="html")
+
+        if min_num_int >= 1000000000 or max_mun_int >= 1000000000 or min_num > max_mun:
+            await bot.edit_message_text(chat_id=message.chat.id, message_id=rnd_mess.message_id,
+                                        text=rnd_something_went_wrong, parse_mode="html")
+            await log("Людина неправильно вказала аргументи.")
+        else:
+            result = await randomorg_parse(min_num, max_mun)
+            await bot.edit_message_text(chat_id=message.chat.id, message_id=rnd_mess.message_id,
+                                        text=f"<b>Мінімальне число: {min_num}\nМаксимальне число: {max_mun}\n"
+                                             f"Результат: {result}</b>", parse_mode="html")
+            await log(f"Вийшло {result} из {min_num} на {max_mun}")
 
 
 @dp.message_handler(commands=["ping"])
