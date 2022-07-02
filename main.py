@@ -3,7 +3,6 @@ from random import randint
 from asyncio import sleep
 from aiogram import Bot, Dispatcher, executor, types
 from aiohttp import ClientSession
-from longfunctions import *
 from config import *
 
 print(r"   ____                   ____              __     __  __            ____        __ ")
@@ -35,7 +34,7 @@ async def log(text):
 async def logheader(msg):
     await log(f"--------------------\n{ctime()}\n"
               f"{msg.from_user.first_name} {msg.from_user.last_name} @{msg.from_user.username} id={msg.from_user.id}\n"
-              f"{msg.chat.title} {msg.chat.invite_link} id = {msg.chat.id}\n-")
+              f"{msg.chat.title} {msg.chat.invite_link} id={msg.chat.id}\n-")
 
 
 async def randomorg_parse(minimum, maximum):
@@ -80,7 +79,19 @@ async def roll(message):
     gamecode = randint(100, 999)
     await log(f"{gamecode} - Звернення до random.org...")
 
-    result = roll_function(await randomorg_parse(1, 37))
+    num = await randomorg_parse(0, 36)
+    if num == 0:
+        result = "Зеро! 🟢 Зелений"
+    elif num == 1 or num == 3 or num == 5 or num == 7 or num == 9 or num == 12 or num == 14 or num == 16 or num == 18\
+            or num == 19 or num == 21 or num == 23 or num == 25 or num == 27 or num == 30 or num == 32 or num == 34\
+            or num == 36:
+        result = f"{num}, 🔴 Червоний"
+    elif num == 2 or num == 4 or num == 6 or num == 8 or num == 10 or num == 11 or num == 13 or num == 15 or num == 17\
+            or num == 20 or num == 22 or num == 24 or num == 26 or num == 28 or num == 29 or num == 31 or num == 33\
+            or num == 35:
+        result = f"{num}, ⚫ Чорний"
+    else:
+        result = "Помилка. Скоріше за все проблема на стороні random.org"
 
     await log(f"{gamecode} - Результат - {result}.")
     await bot.edit_message_text(chat_id=message.chat.id, message_id=roll_mess.message_id,
@@ -112,7 +123,7 @@ async def rnd_command(message):
         else:
             result = await randomorg_parse(min_num, max_mun)
             await bot.edit_message_text(chat_id=message.chat.id, message_id=rnd_mess.message_id,
-                                        text=f"<b>Мінімальне число: {min_num}\nМаксимальне число: {max_mun}\n"
+                                        text=f"<b>Мінімальне число: {min_num}\nМаксимальне число: {max_mun}\n\n"
                                              f"Результат: {result}</b>", parse_mode="html")
             await log(f"Вийшло {result} из {min_num} на {max_mun}")
 
