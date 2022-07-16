@@ -132,7 +132,7 @@ async def rnd_command(message):
 async def ping(message):
     await logheader(message)
     await log("Пінг?")
-    send_mess = f"<b>Понг! Я живий!</b>"
+    send_mess = "<b>Понг! Я живий!</b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html")
     await log("Понг!")
 
@@ -149,7 +149,7 @@ async def disclaimer(message):
 async def author(message):
     await logheader(message)
     await log("Запрошений автор.")
-    send_mess = f"<b>🧑🏻‍💻 Мій автор - @anton165\nЙому можна давати ідеї для нових функцій у боті.</b>"
+    send_mess = "<b>🧑🏻‍💻 Мій автор - @anton165\nЙому можна давати ідеї для нових функцій у боті.</b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html")
     await log("Автор засланий)")
 
@@ -158,7 +158,7 @@ async def author(message):
 async def keyboard(message):
     await logheader(message)
     await log("Запрошено відкриття клавіатури!")
-    send_mess = f"<b>Клавіатура відкрита!</b>"
+    send_mess = "<b>Клавіатура відкрита!</b>"
     await bot.send_message(message.chat.id, send_mess, parse_mode="html", reply_markup=markup1)
     await log("Клавіатура відкрита.")
 
@@ -203,7 +203,7 @@ async def dice(message):
     await log(f"{gamecode} - Запрошений дайс.")
     dice_message = await bot.send_dice(message.chat.id, emoji="🎲")
     await log(f"{gamecode} - Підкинув. Результат: {dice_message.dice.value}. Чекаємо {dice_sleep} сек...")
-    send_mess = f"<b>Зачекайте, будь ласка...</b>"
+    send_mess = "<b>Зачекайте, будь ласка...</b>"
     dice_comment_message = await bot.send_message(message.chat.id, send_mess, parse_mode="html")
 
     dice_emoji = ""
@@ -280,10 +280,10 @@ async def mess(message):
                   f" @{message.from_user.username} id={message.from_user.id}\n{message.chat.title}"
                   f" {message.chat.invite_link} id = {message.chat.id}\n-\nНадіслав(ла): {message.text}")
         if message.from_user.id == message.chat.id:
-            send_mess = f"<b>Я вас не зрозумів :(</b>"
+            send_mess = "<b>Я вас не зрозумів :(</b>"
             await bot.send_message(message.chat.id, send_mess, parse_mode="html")
             await log("Написав користувачеві, що я його не зрозумів")
 
 if __name__ == '__main__':
-    print(f"Доброго дня, Слава Україні!")
+    print("Доброго дня, Слава Україні!")
     executor.start_polling(dp)
