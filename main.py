@@ -13,9 +13,11 @@ print(r"\____/ .___/\___/_/ /_/_/ |_|\____/\____/_/\___/\__/\__/\___/    /_____/
 print(r"    /_/                                                                             ")
 
 
+version = "2.5.0 (17.07.2022)"
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
-logfilename = f"log_{strftime(logfilename_date)}"
+logfile = f"{logfoldername}/log_{strftime(logfilename_date)}.txt"
+
 
 markup1 = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=3)
 markup1.add(types.KeyboardButton("Випадковий факт ❓"),
@@ -27,8 +29,9 @@ markup1.add(types.KeyboardButton("Випадковий факт ❓"),
 async def log(text):
     print(text)
     if enablelog is True:
-        with open(f'{logfoldername}/{logfilename}.txt', 'a', encoding="utf-8") as file:
-            file.write(f"\n{text}")
+        with open(logfile, "a", encoding="utf-8") as file:
+            file.writelines(f"\n{text}")
+            file.close()
 
 
 async def logheader(msg):
@@ -132,9 +135,20 @@ async def rnd_command(message):
 async def ping(message):
     await logheader(message)
     await log("Пінг?")
-    send_mess = "<b>Понг! Я живий!</b>"
+    send_mess = f"<b>Понг! Я живий!</b>\n\nМоя версія:\n<code>{version}</code>\nНадішліть /changelog щоб побачити" \
+                f"повний ченджлог."
     await bot.send_message(message.chat.id, send_mess, parse_mode="html")
     await log("Понг!")
+
+
+@dp.message_handler(commands=["changelog"])
+async def changelog(message):
+    await logheader(message)
+    await log("Ченджлог?")
+    changelogfile = open("changelog.txt", "r", encoding="utf-8")
+    await bot.send_message(message.chat.id, changelogfile.read())
+    changelogfile.close()
+    await log("Ченджлог!")
 
 
 @dp.message_handler(commands=["disclaimer"])
